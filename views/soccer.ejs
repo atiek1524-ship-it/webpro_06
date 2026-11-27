@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>サッカー日本代表</title>
+</head>
+<body>
+  <h2>サッカー日本代表選手一覧</h2>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>選手名</th>
+      <th>ポジション</th>
+      <th>背番号</th>
+      <th>所属クラブ</th>
+    </tr>
+    <% let number = 0 %>
+    <% for(let row of data) { %>
+      <tr>
+        <td><%= row.id %></td>
+        <td><a href="/soccer/<%= number %>"><%= row.name %></a></td>
+        <td><%= row.position %></td>
+        <td><%= row.number %></td>
+        <td><%= row.team %></td>
+      </tr>
+      <% number += 1 %>
+    <% } %>
+  </table>
+  <a href="/soccer/create">追加</a>
+</body>
+</html>

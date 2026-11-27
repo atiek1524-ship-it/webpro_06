@@ -3,6 +3,7 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname + "/public"));
+app.use(express.urlencoded({ extended: true }));
 
 let station = [
   { id:1, code:"JE01", name:"東京駅"},
@@ -37,16 +38,125 @@ let station2 = [
   { id:7, code:"JE18", name:"蘇我駅", change:"内房線，外房線", passengers:31328, distance:43.0 },
 ];
 
+// 一覧
 app.get("/keiyo2", (req, res) => {
   // 本来ならここにDBとのやり取りが入る
   res.render('keiyo2', {data: station2} );
 });
 
+// Create
+app.get("/keiyo2/create", (req, res) => {
+  res.redirect('/public/keiyo2_new.html');
+});
+
+// Read
 app.get("/keiyo2/:number", (req, res) => {
   // 本来ならここにDBとのやり取りが入る
   const number = req.params.number;
   const detail = station2[ number ];
-  res.render('keiyo2_detail', {data: detail} );
+  res.render('keiyo2_detail', {id: number, data: detail} );
+});
+
+// Delete
+app.get("/keiyo2/delete/:number", (req, res) => {
+  station2.splice(req.params.number, 1);
+  res.redirect('/keiyo2');
+});
+
+// Create
+app.post("/keiyo2", (req, res) => {
+  const id = station2.length + 1;
+  const code = req.body.code;
+  const name = req.body.name;
+  const change = req.body.change;
+  const passengers = req.body.passengers;
+  const distance = req.body.distance;
+
+  station2.push({
+    id: id,
+    code: code,
+    name: name,
+    change: change,
+    passengers: passengers,
+    distance: distance
+  });
+
+  console.log(station2);
+  res.render('keiyo2', {data: station2});
+});
+
+// サッカー日本代表選手
+let soccer_japan = [
+  { id:1, name:"塩貝健人", position:"FW", number:25, team:"ヴォルフスブルク", league:"ブンデスリーガ２部" },
+  { id:2, name:"冨安健洋", position:"DF", number:22, team:"クリスタルパレス", league:"プレミアリーグ" },
+  { id:3, name:"久保建英", position:"MF", number:20, team:"レアル・ソシエダ", league:"ラ・リーガ" },
+  { id:4, name:"鎌田大地", position:"MF", number:10, team:"クリスタルパレス", league:"プレミアリーグ" },
+];
+
+let nextSoccerId = 5;
+
+// 一覧
+app.get("/soccer", (req, res) => {
+  res.render('soccer', {data: soccer_japan});
+});
+
+// Create
+app.get("/soccer/create", (req, res) => {
+  res.redirect('/public/soccer_new.html');
+});
+
+// Read
+app.get("/soccer/:number", (req, res) => {
+  const number = req.params.number;
+  const detail = soccer_japan[number];
+  res.render('soccer_detail', {id: number, data: detail});
+});
+
+// Delete
+app.get("/soccer/delete/:number", (req, res) => {
+  soccer_japan.splice(req.params.number, 1);
+  res.redirect('/soccer');
+});
+
+// Create
+app.post("/soccer", (req, res) => {
+  const id = nextSoccerId++;
+  const name = req.body.name;
+  const position = req.body.position;
+  const number = req.body.number;
+  const team = req.body.team;
+  const league = req.body.league;
+
+  soccer_japan.push({
+    id: id,
+    name: name,
+    position: position,
+    number: number,
+    team: team,
+    league: league
+  });
+
+  console.log(soccer_japan);
+  res.redirect('/soccer');
+});
+
+// Edit
+app.get("/soccer/edit/:number", (req, res) => {
+  const number = req.params.number;
+  const detail = soccer_japan[number];
+  res.render('soccer_edit', {id: number, data: detail});
+});
+
+// Update
+app.post("/soccer/update/:number", (req, res) => {
+  soccer_japan[req.params.number].name = req.body.name;
+  soccer_japan[req.params.number].position = req.body.position;
+  soccer_japan[req.params.number].number = req.body.number;
+  soccer_japan[req.params.number].team = req.body.team;
+  soccer_japan[req.params.number].league = req.body.league;
+
+  console.log(soccer_japan);
+  res.redirect('/soccer');
 });
 
 app.get("/hello1", (req, res) => {

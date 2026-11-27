@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>選手の編集</title>
+</head>
+<body>
+  <h2><%= data.name %>の編集</h2>
+  <form action="/soccer/update/<%= id %>" method="post">
+    <table>
+      <tr><th>項目</th><th>データ</th></tr>
+      <tr><td>選手名</td><td><input name="name" value="<%= data.name %>"></td></tr>
+      <tr><td>ポジション</td><td><input name="position" value="<%= data.position %>"></td></tr>
+      <tr><td>背番号</td><td><input name="number" value="<%= data.number %>"></td></tr>
+      <tr><td>所属クラブ</td><td><input name="team" value="<%= data.team %>"></td></tr>
+      <tr><td>リーグ</td><td><input name="league" value="<%= data.league %>"></td></tr>
+    </table>
+    <input type="submit" value="送信">
+  </form>
+  <a href="/soccer">選手一覧に戻る</a>
+</body>
+</html>
